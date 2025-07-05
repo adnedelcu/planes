@@ -2,54 +2,81 @@
 
 using namespace std;
 
-constexpr unsigned char WATER = 178;
+string WATER = "▓";
 
-constexpr unsigned char NOSE_N = 203;
-constexpr unsigned char FRONT_WING_CENTER_N = 206;
-constexpr unsigned char FRONT_WING_LEFT_N = 205;
-constexpr unsigned char FRONT_WING_LEFT_TIP_N = 201;
-constexpr unsigned char FRONT_WING_RIGHT_N = 205;
-constexpr unsigned char FRONT_WING_RIGHT_TIP_N = 187;
-constexpr unsigned char BODY_N = 186;
-constexpr unsigned char BACK_WING_CENTER_N = 202;
-constexpr unsigned char BACK_WING_LEFT_TIP_N = 201;
-constexpr unsigned char BACK_WING_RIGHT_TIP_N = 187;
+/*
+ ┤ ╡ ╖ ╕ ╣ ║ ╜
+ ╛ ┐ └ ╞ ╩ ╦ ╠
+ ═ ╬ ╨ ╥ ╙ ╘ ╒
+ ┘ ┌
+ */
 
-constexpr unsigned char NOSE_S = 178;
-constexpr unsigned char FRONT_WING_CENTER_S = 178;
-constexpr unsigned char FRONT_WING_LEFT_S = 178;
-constexpr unsigned char FRONT_WING_LEFT_TIP_S = 178;
-constexpr unsigned char FRONT_WING_RIGHT_S = 178;
-constexpr unsigned char FRONT_WING_RIGHT_TIP_S = 178;
-constexpr unsigned char BODY_S = 178;
-constexpr unsigned char BACK_WING_CENTER_S = 178;
-constexpr unsigned char BACK_WING_LEFT_TIP_S = 178;
-constexpr unsigned char BACK_WING_RIGHT_TIP_S = 178;
+/*
+North       East
+  ╥           ╖
+╒═╬═╕       ┐ ║
+  ║         ╞═╬╡
+ ┌╨┐        ┘ ║
+              ╜
 
-constexpr unsigned char NOSE_E = 178;
-constexpr unsigned char FRONT_WING_CENTER_E = 178;
-constexpr unsigned char FRONT_WING_LEFT_E = 178;
-constexpr unsigned char FRONT_WING_LEFT_TIP_E = 178;
-constexpr unsigned char FRONT_WING_RIGHT_E = 178;
-constexpr unsigned char FRONT_WING_RIGHT_TIP_E = 178;
-constexpr unsigned char BODY_E = 178;
-constexpr unsigned char BACK_WING_CENTER_E = 178;
-constexpr unsigned char BACK_WING_LEFT_TIP_E = 178;
-constexpr unsigned char BACK_WING_RIGHT_TIP_E = 178;
+South        West
+ └╥┘         ╓
+  ║          ║ ┌
+╘═╬═╛       ╞╬═╡
+  ╨          ║ └
+             ╙
+*/
 
-constexpr unsigned char NOSE_W = 178;
-constexpr unsigned char FRONT_WING_CENTER_W = 178;
-constexpr unsigned char FRONT_WING_LEFT_W = 178;
-constexpr unsigned char FRONT_WING_LEFT_TIP_W = 178;
-constexpr unsigned char FRONT_WING_RIGHT_W = 178;
-constexpr unsigned char FRONT_WING_RIGHT_TIP_W = 178;
-constexpr unsigned char BODY_W = 178;
-constexpr unsigned char BACK_WING_CENTER_W = 178;
-constexpr unsigned char BACK_WING_LEFT_TIP_W = 178;
-constexpr unsigned char BACK_WING_RIGHT_TIP_W = 178;
+/** North orientation plane components */
+string NOSE_N = "╥";
+string FRONT_WING_CENTER_N = "╬";
+string FRONT_WING_LEFT_N = "═";
+string FRONT_WING_LEFT_TIP_N = "╒";
+string FRONT_WING_RIGHT_N = "═";
+string FRONT_WING_RIGHT_TIP_N = "╕";
+string BODY_N = "║";
+string BACK_WING_CENTER_N = "╨";
+string BACK_WING_LEFT_TIP_N = "┌";
+string BACK_WING_RIGHT_TIP_N = "┐";
+
+/** South orientation plane components */
+string NOSE_S = "╨";
+string FRONT_WING_CENTER_S = "╬";
+string FRONT_WING_LEFT_S = "═";
+string FRONT_WING_LEFT_TIP_S = "╘";
+string FRONT_WING_RIGHT_S = "═";
+string FRONT_WING_RIGHT_TIP_S = "╛";
+string BODY_S = "║";
+string BACK_WING_CENTER_S = "╥";
+string BACK_WING_LEFT_TIP_S = "└";
+string BACK_WING_RIGHT_TIP_S = "┘";
+
+/** East orientation plane components */
+string NOSE_E = "╡";
+string FRONT_WING_CENTER_E = "╬";
+string FRONT_WING_LEFT_E = "║";
+string FRONT_WING_LEFT_TIP_E = "╖";
+string FRONT_WING_RIGHT_E = "║";
+string FRONT_WING_RIGHT_TIP_E = "╜";
+string BODY_E = "═";
+string BACK_WING_CENTER_E = "╞";
+string BACK_WING_LEFT_TIP_E = "┐";
+string BACK_WING_RIGHT_TIP_E = "┘";
+
+/** West orientation plane components */
+string NOSE_W = "╞";
+string FRONT_WING_CENTER_W = "╬";
+string FRONT_WING_LEFT_W = "║";
+string FRONT_WING_LEFT_TIP_W = "╙";
+string FRONT_WING_RIGHT_W = "║";
+string FRONT_WING_RIGHT_TIP_W = "╓";
+string BODY_W = "═";
+string BACK_WING_CENTER_W = "╡";
+string BACK_WING_LEFT_TIP_W = "└";
+string BACK_WING_RIGHT_TIP_W = "┌";
 
 int planes_count = 0, ci, cj;
-unsigned char p1[10][10], p2[10][10], c1[10][10], c2[10][10];
+string p1[10][10], p2[10][10], c1[10][10], c2[10][10];
 enum Mode { N, S, E, W };
 
 void create_terrains() {
@@ -63,81 +90,214 @@ void create_terrains() {
     }
 };
 
-bool validate_mode(const unsigned char terrain[10][10], const Mode mode, const int pos_x, const int pos_y) {
+bool validate_mode(const string terrain[10][10], const Mode mode, const int pos_x, const int pos_y) {
+    cout << "X: " << pos_x << " Y: " << pos_y << endl;
     switch (mode) {
         case N:
-            if (pos_x - 1 < 0 || pos_x + 2 > 9 || pos_y - 2 < 0 || pos_y + 2 > 9) {
+            /**
+             * min and max limits
+             * x = 0, y = 2
+             * x = 0, y = 7
+             * x = 6, y = 2
+             * x = 6, y = 7
+             */
+            if (pos_x < 0 || pos_x > 6 || pos_y < 2 || pos_y > 7) {
+                return false;
+            }
+
+            if (
+                terrain[pos_x][pos_y] != WATER ||
+                terrain[pos_x + 1][pos_y] != WATER ||
+                terrain[pos_x + 1][pos_y - 1] != WATER ||
+                terrain[pos_x + 1][pos_y + 1] != WATER ||
+                terrain[pos_x + 1][pos_y - 2] != WATER ||
+                terrain[pos_x + 1][pos_y + 2] != WATER ||
+                terrain[pos_x + 2][pos_y] != WATER ||
+                terrain[pos_x + 3][pos_y - 1] != WATER ||
+                terrain[pos_x + 3][pos_y] != WATER ||
+                terrain[pos_x + 3][pos_y + 1] != WATER
+            ) {
+                return false;
+            }
+
+            return true;
+
+        case S:
+            /**
+             * min and max limits
+             * x = 9, y = 7
+             * x = 9, y = 2
+             * x = 3, y = 7
+             * x = 3, y = 2
+             */
+            if (pos_x < 3 || pos_x > 9 || pos_y < 2 || pos_y > 7) {
                 return false;
             }
 
             if (
                 terrain[pos_x][pos_y] != WATER ||
                 terrain[pos_x - 1][pos_y] != WATER ||
-                terrain[pos_x][pos_y - 1] != WATER ||
-                terrain[pos_x][pos_y + 1] != WATER ||
-                terrain[pos_x][pos_y - 2] != WATER ||
-                terrain[pos_x][pos_y + 2] != WATER ||
-                terrain[pos_x + 1][pos_y] != WATER ||
-                terrain[pos_x + 2][pos_y - 1] != WATER ||
-                terrain[pos_x + 2][pos_y] != WATER ||
-                terrain[pos_x + 2][pos_y + 1] != WATER
+                terrain[pos_x - 1][pos_y - 1] != WATER ||
+                terrain[pos_x - 1][pos_y + 1] != WATER ||
+                terrain[pos_x - 1][pos_y - 2] != WATER ||
+                terrain[pos_x - 1][pos_y + 2] != WATER ||
+                terrain[pos_x - 2][pos_y] != WATER ||
+                terrain[pos_x - 3][pos_y - 1] != WATER ||
+                terrain[pos_x - 3][pos_y] != WATER ||
+                terrain[pos_x - 3][pos_y + 1] != WATER
             ) {
                 return false;
             }
 
             return true;
-        case S:
-            return true;
 
         case E:
+            /**
+             * min and max limits
+             * x = 2, y = 3
+             * x = 2, y = 9
+             * x = 7, y = 3
+             * x = 7, y = 9
+             */
+            if (pos_x < 2 || pos_x > 7 || pos_y < 3 || pos_y > 9)
+            {
+                return false;
+            }
+
+            if (
+                terrain[pos_x][pos_y] != WATER ||
+                terrain[pos_x][pos_y - 1] != WATER ||
+                terrain[pos_x - 1][pos_y - 1] != WATER ||
+                terrain[pos_x + 1][pos_y - 1] != WATER ||
+                terrain[pos_x - 2][pos_y - 1] != WATER ||
+                terrain[pos_x + 2][pos_y - 1] != WATER ||
+                terrain[pos_x][pos_y - 2] != WATER ||
+                terrain[pos_x - 1][pos_y - 3] != WATER ||
+                terrain[pos_x][pos_y - 3] != WATER ||
+                terrain[pos_x + 1][pos_y - 3] != WATER
+            ) {
+                return false;
+            }
+
             return true;
 
         case W:
+            /**
+             * min and max limits
+             * x = 2, y = 0
+             * x = 2, y = 6
+             * x = 7, y = 0
+             * x = 7, y = 6
+             */
+            if (pos_x < 2 || pos_x > 7 || pos_y < 0 || pos_y > 6)
+            {
+                return false;
+            }
+
+            if (
+                terrain[pos_x][pos_y] != WATER ||
+                terrain[pos_x][pos_y + 1] != WATER ||
+                terrain[pos_x - 1][pos_y + 1] != WATER ||
+                terrain[pos_x + 1][pos_y + 1] != WATER ||
+                terrain[pos_x - 2][pos_y + 1] != WATER ||
+                terrain[pos_x + 2][pos_y + 1] != WATER ||
+                terrain[pos_x][pos_y + 2] != WATER ||
+                terrain[pos_x - 1][pos_y + 3] != WATER ||
+                terrain[pos_x][pos_y + 3] != WATER ||
+                terrain[pos_x + 1][pos_y + 3] != WATER
+            ) {
+                return false;
+            }
+
             return true;
     }
 }
 
-void show_terrain(const unsigned char(* p1)[10]) {
-    for (int i = 0; i < 10; i++) {
-        for (int j = 0; j < 10; j++) {
-            cout << p1[i][j];
+void show_terrain(const string(* p1)[10]) {
+    for (int i = 0; i <= 10; i++) {
+        for (int j = 0; j <= 10; j++) {
+            if (j == 0 && i == 0) {
+                cout << " ";
+                continue;
+            }
+            if (j == 0) {
+                cout << (char)(i+64);
+                continue;
+            }
+            if (i == 0) {
+                cout << j;
+                continue;
+            }
+            cout << p1[i - 1][j - 1];
         }
         cout << endl;
     }
 };
 
-void place_plane(const Mode mode, const int pos_x, const int pos_y) {
-    if (!validate_mode(p1, mode, pos_x, pos_y)) {
-        cout << "Positioning of the plane was not possible because of overlapping or out of bounds." << endl;
-        return;
-    }
-
+void place_plane(const Mode mode, const int pos_x, const int pos_y, bool should_show_terrain = true)
+{
     switch (mode) {
         case N:
-            p1[pos_x][pos_y] = FRONT_WING_CENTER_N;
-            p1[pos_x - 1][pos_y] = NOSE_N;
-            p1[pos_x][pos_y - 1] = FRONT_WING_LEFT_N;
-            p1[pos_x][pos_y + 1] = FRONT_WING_RIGHT_N;
-            p1[pos_x][pos_y - 2] = FRONT_WING_LEFT_TIP_N;
-            p1[pos_x][pos_y + 2] = FRONT_WING_RIGHT_TIP_N;
-            p1[pos_x + 1][pos_y] = BODY_N;
-            p1[pos_x + 2][pos_y - 1] = BACK_WING_LEFT_TIP_N;
-            p1[pos_x + 2][pos_y] = BACK_WING_CENTER_N;
-            p1[pos_x + 2][pos_y + 1] = BACK_WING_RIGHT_TIP_N;
+            p1[pos_x][pos_y] = NOSE_N;
+            p1[pos_x + 1][pos_y] = FRONT_WING_CENTER_N;
+            p1[pos_x + 1][pos_y - 1] = FRONT_WING_LEFT_N;
+            p1[pos_x + 1][pos_y + 1] = FRONT_WING_RIGHT_N;
+            p1[pos_x + 1][pos_y - 2] = FRONT_WING_LEFT_TIP_N;
+            p1[pos_x + 1][pos_y + 2] = FRONT_WING_RIGHT_TIP_N;
+            p1[pos_x + 2][pos_y] = BODY_N;
+            p1[pos_x + 3][pos_y - 1] = BACK_WING_LEFT_TIP_N;
+            p1[pos_x + 3][pos_y] = BACK_WING_CENTER_N;
+            p1[pos_x + 3][pos_y + 1] = BACK_WING_RIGHT_TIP_N;
 
             break;
 
         case S:
+            p1[pos_x][pos_y] = NOSE_S;
+            p1[pos_x - 1][pos_y] = FRONT_WING_CENTER_S;
+            p1[pos_x - 1][pos_y - 1] = FRONT_WING_LEFT_S;
+            p1[pos_x - 1][pos_y + 1] = FRONT_WING_RIGHT_S;
+            p1[pos_x - 1][pos_y - 2] = FRONT_WING_LEFT_TIP_S;
+            p1[pos_x - 1][pos_y + 2] = FRONT_WING_RIGHT_TIP_S;
+            p1[pos_x - 2][pos_y] = BODY_S;
+            p1[pos_x - 3][pos_y - 1] = BACK_WING_LEFT_TIP_S;
+            p1[pos_x - 3][pos_y] = BACK_WING_CENTER_S;
+            p1[pos_x - 3][pos_y + 1] = BACK_WING_RIGHT_TIP_S;
+
             break;
 
         case E:
+            p1[pos_x][pos_y] = NOSE_E;
+            p1[pos_x][pos_y - 1] = FRONT_WING_CENTER_E;
+            p1[pos_x - 1][pos_y - 1] = FRONT_WING_LEFT_E;
+            p1[pos_x + 1][pos_y - 1] = FRONT_WING_RIGHT_E;
+            p1[pos_x - 2][pos_y - 1] = FRONT_WING_LEFT_TIP_E;
+            p1[pos_x + 2][pos_y - 1] = FRONT_WING_RIGHT_TIP_E;
+            p1[pos_x][pos_y - 2] = BODY_E;
+            p1[pos_x - 1][pos_y - 3] = BACK_WING_LEFT_TIP_E;
+            p1[pos_x][pos_y - 3] = BACK_WING_CENTER_E;
+            p1[pos_x + 1][pos_y - 3] = BACK_WING_RIGHT_TIP_E;
+
             break;
 
         case W:
+            p1[pos_x][pos_y] = NOSE_W;
+            p1[pos_x][pos_y + 1] = FRONT_WING_CENTER_W;
+            p1[pos_x + 1][pos_y + 1] = FRONT_WING_LEFT_W;
+            p1[pos_x - 1][pos_y + 1] = FRONT_WING_RIGHT_W;
+            p1[pos_x + 2][pos_y + 1] = FRONT_WING_LEFT_TIP_W;
+            p1[pos_x - 2][pos_y + 1] = FRONT_WING_RIGHT_TIP_W;
+            p1[pos_x][pos_y + 2] = BODY_W;
+            p1[pos_x + 1][pos_y + 3] = BACK_WING_LEFT_TIP_W;
+            p1[pos_x][pos_y + 3] = BACK_WING_CENTER_W;
+            p1[pos_x - 1][pos_y + 3] = BACK_WING_RIGHT_TIP_W;
+
             break;
     }
 
-    show_terrain(p1);
+    cout << "Seems the position for this orientation works. Here's you current battlefield." << endl;
+    if (should_show_terrain) {
+        show_terrain(p1);
+    }
 };
 
 void clear_screen() {
@@ -146,18 +306,12 @@ void clear_screen() {
 
 int main() {
     create_terrains();
-    for (int i = 0; i < 10; i++) {
-        for (int j = 0; j < 10; j++) {
-            cout << p1[i][j];
-        }
-        cout << endl;
-    }
     show_terrain(p1);
 
-    while (planes_count < 3) {
+    while (planes_count < 4) {
         cout << "Enter direction of the plan (N,S,E,W): ";
-        char input;
-        int pos_x, pos_y;
+        char input, pos_x;
+        int pos_y;
         cin >> input;
         Mode mode;
         switch (input) {
@@ -189,18 +343,50 @@ int main() {
                 cout << "Invalid mode provided." << endl;
                 continue;
         }
-        system("cls");
-        cout << "Enter the horizontal position of the plane: ";
+        cout << "Enter the vertical position of the plane (A - J): ";
         cin >> pos_x;
         cout << endl;
-        cout << "Enter the vertical position of the plane: ";
+        cout << "Enter the horizontal position of the plane (1 - 10): ";
         cin >> pos_y;
         cout << endl;
-        place_plane(mode, pos_x, pos_y);
-
-        planes_count++;
+        int hor_pos, ver_pos;
+        if (pos_x - 64 >= 1 && pos_x - 64 <= 10) {
+            hor_pos = pos_x - 65;
+        }
+        if (pos_x - 96 >= 1 && pos_x - 96 <= 10) {
+            hor_pos = pos_x - 97;
+        }
+        if (pos_y >= 1 && pos_y <= 10) {
+            ver_pos = pos_y - 1;
+        }
         clear_screen();
+        cout << "You chose orientation " << input << " and position " << pos_x << pos_y << ". Let's see if it can be placed." << endl;
+        if (!validate_mode(p1, mode, hor_pos, ver_pos))
+        {
+            cout << "Positioning of the plane was not possible because of overlapping or out of bounds." << endl;
+            show_terrain(p1);
+            continue;
+        }
+        place_plane(mode, hor_pos, ver_pos);
+        planes_count++;
     }
+
+    cout << "Now that you have placed all your planes, let me place mine and then we can start the fight." << endl;
+
+    planes_count = 0;
+    while (planes_count < 3) {
+        Mode mode = static_cast<Mode>(rand() % 3);
+        int hor_pos = rand() % 7 + 1;
+        int ver_pos = rand() % 7 + 1;
+        if (validate_mode(c1, mode, hor_pos, ver_pos)) {
+            continue;
+        }
+        // @TODO: fix placing computer plane
+        // place_plane(mode, hor_pos, ver_pos);
+        planes_count++;
+    }
+
+    cout << "Thanks for waiting. Now let's fight. Prepare to go down." << endl;
 
     return 0;
 }
